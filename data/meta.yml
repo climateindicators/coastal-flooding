@@ -1,0 +1,35 @@
+indicator:
+  name: Coastal Flooding
+  slug: costal-flooding
+  publisher: U.S. Environmental Protection Agency
+  source_page: https://19january2025snapshot.epa.gov/climate-indicators/climate-change-indicators-coastal-flooding/index.html
+  technical_documentation: https://19january2025snapshot.epa.gov/system/files/documents/2024-09/coastal-flooding_documentation.pdf
+  rights: Public domain, work of the U.S. Government (17 U.S.C. 105)
+datasets:
+- file: coastal_flood_days_by_site.csv
+  figure: Figure 1
+  figure_title: Figure 1. Frequency of Flooding Along U.S. Coasts, 2014–2023 Versus
+    1950–1959
+  source_file: coastal-flooding_fig-1.csv
+  source_sha256: d89ebf67ab0d4fd62730e11d4b21f95afed5a9c9a456a570703bf221a4f6ecd2
+  source_encoding: windows-1252
+  data_source: NOAA, 2024
+  web_update: September 2024
+  unit: average number of flood days per year
+  rows: 84
+  columns:
+  - name: site
+    type: string
+    description: NOAA tide gauge site name as published by EPA
+  - name: latitude
+    type: number
+    description: Latitude of the tide gauge, decimal degrees north
+  - name: longitude
+    type: number
+    description: Longitude of the tide gauge, decimal degrees (negative = west)
+  - name: period
+    type: string
+    description: 'Decade the average covers: 1950-1959 or 2014-2023'
+  - name: value
+    type: number
+    description: Average number of flood days per year at the site over the period
