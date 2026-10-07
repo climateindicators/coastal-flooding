@@ -30,7 +30,7 @@ rd <- function(f) {
 meta <- yaml::read_yaml("data/meta.yml")
 
 cat("\nData dictionary\n")
-check("meta.yml documents 1 dataset(s)", length(meta$datasets) == 1L)
+check("meta.yml documents 2 dataset(s)", length(meta$datasets) == 2L)
 check("meta.yml has no timestamp",
       !any(grepl("\\d{4}-\\d{2}-\\d{2}T|Sys\\.time|generated_at",
                  readLines("data/meta.yml", warn = FALSE))))
@@ -85,6 +85,28 @@ check("flood days: 2014-2023 max is 18 (Hilo, HI)",
       extreme(f1, "2014-2023", which.max) == "18" &&
         f1$site[f1$period == "2014-2023" & f1$value == "18"] == "Hilo, HI")
 check("flood days: no blank values", all(nzchar(f1$value)))
+
+# Pinned from coastal-flooding_fig-2.csv (NOAA, 2024; web update September 2024).
+f2 <- rd("coastal_flood_events_by_site.csv")
+f2_max <- function(p) {
+  x <- f2[f2$period == p, ]
+  paste(x$site[which.max(as.numeric(x$value))], x$value[which.max(as.numeric(x$value))], sep = "|")
+}
+
+check("flood events: 168 rows (42 sites x 4 periods)", nrow(f2) == 168L)
+check("flood events: same 42 sites as Figure 1", setequal(f2$site, f1$site))
+check("flood events: every site appears in all four periods",
+      all(table(f2$site) == 4L) &&
+        setequal(f2$period, c("1950-1969", "1970-1989", "1990-2009", "2010-2023")))
+check("flood events: first row", row_str(f2, 1) == "Honolulu, HI|1950-1969|0.45")
+check("flood events: last row", row_str(f2, 168) == "Adak Island, AK|2010-2023|0.785714286")
+check("flood events: 1950-1969 min is 0.05",        extreme(f2, "1950-1969", which.min) == "0.05")
+check("flood events: 1950-1969 max is Neah Bay, WA 13.72222222", f2_max("1950-1969") == "Neah Bay, WA|13.72222222")
+check("flood events: 1970-1989 max is Neah Bay, WA 9.8",         f2_max("1970-1989") == "Neah Bay, WA|9.8")
+check("flood events: 1990-2009 max is Neah Bay, WA 8.65",        f2_max("1990-2009") == "Neah Bay, WA|8.65")
+check("flood events: 2010-2023 min is 0.071428571", extreme(f2, "2010-2023", which.min) == "0.071428571")
+check("flood events: 2010-2023 max is Hilo, HI 14.07692308",     f2_max("2010-2023") == "Hilo, HI|14.07692308")
+check("flood events: no blank values", all(nzchar(f2$value)))
 
 cat("\n")
 if (length(failures)) {

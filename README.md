@@ -1,4 +1,4 @@
-# costal-flooding
+# coastal-flooding
 
 Data and narrative for the U.S. EPA climate indicator **Coastal Flooding**.
 

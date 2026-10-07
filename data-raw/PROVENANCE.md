@@ -21,4 +21,10 @@ Technical documentation: <https://19january2025snapshot.epa.gov/system/files/doc
   title: Figure 1. Frequency of Flooding Along U.S. Coasts, 2014–2023 Versus 1950–1959  \
   data source: NOAA, 2024; web update: September 2024; units: degrees; degrees; average number of flood days per year; average number of flood days per year
 
-- **Figure 2** has no data download on EPA's page, because EPA renders it as a JavaScript chart. The narrative carries the caption; there is nothing to build.
+- `coastal-flooding_fig-2.csv`  \
+  <https://19january2025snapshot.epa.gov/system/files/other-files/2024-09/coastal-flooding_fig-2.csv>  \
+  sha256 `60af11e9f05a8fb39f04a23c9dbe5459ba9e656e8230fa2d26066838e4fe6966`  \
+  encoding windows-1252, 42 data rows, columns: (blank, site name), `1950-1969`, `1970-1989`, `1990-2009`, `2010-2023`  \
+  title: Figure 2. Average Number of Coastal Flood Events per Year, 1950–2023  \
+  data source: NOAA, 2024; web update: September 2024; units: average number of flood events per year  \
+  EPA renders this figure as an interactive chart with no download link on the page; the file was downloaded by hand from the chart and confirmed byte-identical to the URL above.

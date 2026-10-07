@@ -25,7 +25,7 @@ dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
 
 INDICATOR <- list(
   name                    = "Coastal Flooding",
-  slug                    = "costal-flooding",
+  slug                    = "coastal-flooding",
   publisher               = "U.S. Environmental Protection Agency",
   source_page             = "https://19january2025snapshot.epa.gov/climate-indicators/climate-change-indicators-coastal-flooding/index.html",
   technical_documentation = "https://19january2025snapshot.epa.gov/system/files/documents/2024-09/coastal-flooding_documentation.pdf",
@@ -61,6 +61,31 @@ f1 <- bind_rows(
 
 write_csv_stable(f1, file.path(out_dir, "coastal_flood_days_by_site.csv"))
 
+# ---- Figure 2: Average Number of Coastal Flood Events per Year, 1950–2023 ----
+#
+# EPA renders this figure as an interactive chart; the CSV was downloaded by hand
+# from the chart and is byte-identical to the URL recorded in PROVENANCE.md.
+
+f2_path <- file.path(raw_dir, "coastal-flooding_fig-2.csv")
+f2_meta <- read_epa_preamble(f2_path)
+f2_raw  <- read_epa_csv(f2_path)
+
+# EPA leaves the site-name header blank.
+f2_periods <- c("1950-1969", "1970-1989", "1990-2009", "2010-2023")
+assert_headers(
+  f2_raw,
+  id_cols          = "",
+  expected_headers = f2_periods,
+  what             = "coastal-flooding_fig-2.csv"
+)
+
+# One row per site per period, sites in EPA's order. Values stay character.
+f2 <- bind_rows(lapply(f2_periods, function(p) {
+  tibble(site = f2_raw[[1]], period = p, value = f2_raw[[p]])
+}))
+
+write_csv_stable(f2, file.path(out_dir, "coastal_flood_events_by_site.csv"))
+
 # ---- Data dictionary ---------------------------------------------------------
 
 col <- function(name, type, description) {
@@ -70,13 +95,13 @@ col <- function(name, type, description) {
 # One entry per output column, in order, filled from the data frame itself so it
 # cannot drift. `type` and `description` are deliberately blank: tests/test-data.R
 # fails while either is empty, so every column has to be documented by hand.
-describe <- function(df) {
+describe <- function(df, period, value) {
   docs <- list(
     site      = col("site", "string", "NOAA tide gauge site name as published by EPA"),
     latitude  = col("latitude", "number", "Latitude of the tide gauge, decimal degrees north"),
     longitude = col("longitude", "number", "Longitude of the tide gauge, decimal degrees (negative = west)"),
-    period    = col("period", "string", "Decade the average covers: 1950-1959 or 2014-2023"),
-    value     = col("value", "number", "Average number of flood days per year at the site over the period")
+    period    = col("period", "string", period),
+    value     = col("value", "number", value)
   )
   unname(docs[names(df)])
 }
@@ -95,7 +120,24 @@ meta <- list(
       web_update      = f1_meta$web_update,
       unit            = "average number of flood days per year",
       rows            = nrow(f1),
-      columns         = describe(f1)
+      columns         = describe(f1,
+                                 period = "Decade the average covers: 1950-1959 or 2014-2023",
+                                 value  = "Average number of flood days per year at the site over the period")
+    ),
+    list(
+      file            = "coastal_flood_events_by_site.csv",
+      figure          = "Figure 2",
+      figure_title    = f2_meta$title,
+      source_file     = "coastal-flooding_fig-2.csv",
+      source_sha256   = file_sha256(f2_path),
+      source_encoding = "windows-1252",
+      data_source     = f2_meta$data_source,
+      web_update      = f2_meta$web_update,
+      unit            = f2_meta$units,
+      rows            = nrow(f2),
+      columns         = describe(f2,
+                                 period = "Period the average covers: 1950-1969, 1970-1989, 1990-2009, or 2010-2023",
+                                 value  = "Average number of coastal flood events per year at the site over the period")
     )
   )
 )

@@ -1,6 +1,6 @@
 indicator:
   name: Coastal Flooding
-  slug: costal-flooding
+  slug: coastal-flooding
   publisher: U.S. Environmental Protection Agency
   source_page: https://19january2025snapshot.epa.gov/climate-indicators/climate-change-indicators-coastal-flooding/index.html
   technical_documentation: https://19january2025snapshot.epa.gov/system/files/documents/2024-09/coastal-flooding_documentation.pdf
@@ -33,3 +33,24 @@ datasets:
   - name: value
     type: number
     description: Average number of flood days per year at the site over the period
+- file: coastal_flood_events_by_site.csv
+  figure: Figure 2
+  figure_title: Figure 2. Average Number of Coastal Flood Events per Year, 1950–2023
+  source_file: coastal-flooding_fig-2.csv
+  source_sha256: 60af11e9f05a8fb39f04a23c9dbe5459ba9e656e8230fa2d26066838e4fe6966
+  source_encoding: windows-1252
+  data_source: NOAA, 2024
+  web_update: September 2024
+  unit: average number of flood events per year
+  rows: 168
+  columns:
+  - name: site
+    type: string
+    description: NOAA tide gauge site name as published by EPA
+  - name: period
+    type: string
+    description: 'Period the average covers: 1950-1969, 1970-1989, 1990-2009, or 2010-2023'
+  - name: value
+    type: number
+    description: Average number of coastal flood events per year at the site over
+      the period

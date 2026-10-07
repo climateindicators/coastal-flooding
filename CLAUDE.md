@@ -20,10 +20,10 @@ indicator, Coastal Flooding**. It takes EPA's published per-figure CSV downloads
 Both are consumed by the website repository, `../climateindicators.us`
 (published at [climateindicators.us](https://climateindicators.us)): `data/` is
 fetched off `raw.githubusercontent.com` at render time, and the prose in
-`narrative.qmd` is lifted into `indicators/costal-flooding.qmd` there.
+`narrative.qmd` is lifted into `indicators/coastal-flooding.qmd` there.
 
 **This repository is not a website and draws no figures.** All chart code lives
-in the site repository, in `R/costal-flooding.R`. Nothing here should produce a plot, a
+in the site repository, in `R/coastal-flooding.R`. Nothing here should produce a plot, a
 theme, a palette, or an htmlwidget, and nothing here should be rendered.
 
 Source of the indicator, and the canonical reference for any wording question:
